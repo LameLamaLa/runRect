@@ -1,0 +1,474 @@
+﻿<!DOCTYPE html>
+<html style=" height:100%;width:100%">
+  <head>
+  <meta charset="UTF-8" >
+  <title>runRect</title>
+  <link href="style.css" type="text/css" rel="stylesheet"></link>
+
+</head>
+<body id="result" >
+<!-- by Smirnov Vlad -->
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter43358829 = new Ya.Metrika({
+                    id:43358829,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/43358829" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+
+
+<div id="wrapper" >
+
+  <div id ="option" >
+    <div id="optionExitButton" ><h2 align="center">Выход в меню</h2></div>
+	<div id = "optionSpeedAbout">
+	<h2>Максимальная скорость объектов:</h2></div>
+<div id = "optionSpeed">
+	<input  type="range" min="0" max="10" onchange="document.getElementById('rangeSpeed').innerHTML = this.value;maxSpeed+=this.value-maxSpeedOption;maxSpeedOption=this.value;" list="speed" value=0> <span id="rangeSpeed">0</span></p>
+<datalist id="speed" >
+
+</datalist>
+</div>
+<div id = "optionHardAbout">
+<h2>количество объектов на поле:</h2>
+</div>
+<div id = "optionHard">
+<input  type="range" min="18" max="25" onchange="document.getElementById('rangeValue').innerHTML = this.value;maxHard=this.value;" list="hard" value=20> <span id="rangeValue">20</span></p>
+<datalist id="hard" >
+
+</datalist>
+</div>
+	
+	
+  </div>
+
+  <div id ="about" >
+    <div id="aboutHeader">
+     <h4> <div id="aboutHeader1">    автор </div></h3>
+	  <h2><div id="aboutHeader2" >правила</div></h2>
+	 <h4> <div id="aboutHeader3">создание </div></h3>
+	</div>  
+	<big><div id ="aboutText"><p> Вы управляете квадратом через клавиши :A , S , D , W , Spase .   Цель игры  не столкнуться  с падающими объектами .</p> <p> Для усложнения игры  вы  можете поменять значения  скорости и количество падающих объектов  в настройках. </p>
+	
+	</div></big>
+    <div id="aboutLastButton" align ="center"><h2 style="margin-top:29px;">назад</h2></div>
+    <div id="aboutExitButton" align ="center"><h2>Выход в меню</h2></div>
+    <div id="aboutNextButton" align ="center" ><h2 style="margin-top:29px;">дальше</h2></div>
+	 
+  </div>
+  
+  <div id ="meny" >
+
+    <div id="rec" >
+      <h1 style="padding-left :22%;padding-top :25%;">runRect</h1>
+    </div> 
+
+    <div id="wrapStart">
+      <div id="startButton" align ="center"><h2>Старт</h2></div>
+      <div id="optionButton" align ="center"><h2>Настройки</h2></div>
+      <div id="aboutButton" align ="center"><h2>О проекте</h2></div>
+    </div>  
+	
+    <h3>
+      <div id="stat" align = "center" style="margin-top:50px";>
+        (для начала игры нажмите старт  )  
+      </div> 
+    </h3>
+   
+  </div>
+  
+  <div id="wrapperCanvas">
+    <canvas id="canvasld" >
+      Hey привет
+    </canvas>
+  </div>
+  
+</div>
+<script src="js/devise.js"></script>
+<script src="js/vector.js"></script>
+<script src="js/polygon.js"></script>
+<script src="js/creatOb.js"></script>
+<script src="js/extraFun.js"></script>
+
+<script src="js/jquery-3.1.1.min.js"></script>
+<script src="js/navigation.js"></script>
+
+
+
+
+<script type="text/javascript">
+/*if(device.mobile()) alert('Смартфон');
+if(device.desktop()) alert('ПК');
+if(device.tablet()) alert('Планшет');
+
+//Ориентация экрана
+if(device.landscape()) alert('Альбомная (в ширину)');
+if(device.portrait()) alert('Портретная (в высоту)');
+//ОС устройства
+if(device.ios()) alert('iOS');
+if(device.ipad()) alert('ipad');
+if(device.iphone()) alert('iphone');
+if(device.ipod()) alert('ipod');
+if(device.android()) alert('android');
+if(device.windows()) alert('windows');
+if(device.blackberry()) alert('blackberry');
+if(device.fxos()) alert('fxos');
+
+*/
+
+
+var canvas = document.getElementById("canvasld");
+var width = 500;//window.innerWidth/3;
+var height =800;// window.innerHeight-20;
+canvas.width = width;
+canvas.height = height;
+var  ctx  =  canvas.getContext("2d");
+
+  canvas.onclick =function(e){
+  
+    var x,y;
+	x = e.offsetX;
+	y = e.offsetY; 
+	var clickXY = new vector();  
+
+	clickXY.x = x;
+	clickXY.y = y;
+    console.log(e);
+   // обрабатываем кнопку паузы
+  if(x > 450 && x < width && y < 50 && y > 0){
+	if(startGame==1){
+	startGame =0;
+	clear(); 
+	
+	if(instructionTime>0 && !sensor){
+	     instructionTime--;
+         ctx.drawImage(imageInstruc,0,500,500,300);
+		 	 
+    	} 
+		if(sensor){
+		  ctx.drawImage(imageStop,menyVector.x,menyVector.y,50,50);
+	   ctx.drawImage(imageRight,menyVector.x+100,menyVector.y,50,50);
+	   ctx.drawImage(imageLeft,menyVector.x-100,menyVector.y,50,50);
+	   ctx.drawImage(imageDown,menyVector.x,menyVector.y+100,50,50);
+	   ctx.drawImage(imageTop,menyVector.x,menyVector.y-100,50,50);
+	   }
+	  print("МОЙ СЧЕТ : "+score,50);
+	  plaer.draw();
+    for( var i = 0; i < blockagePolygon.length ;++i) {
+        blockagePolygon[i].draw();
+	   }
+	//ctx.drawImage(imageStart,450,0,50,50);
+	drawStart();
+	
+	}
+	else
+	startGame =1;
+	// обрабатывет нажатия
+	}
+	else{
+	 var axisOX = new vector();
+	
+	 axisOX.x = menyVector.x + 1;
+	   
+	 axisOX.y = menyVector.y ;
+	   
+	 var a = getAngle( getVectorEB( clickXY , menyVector) , getVectorEB(axisOX , menyVector) );
+	 
+	
+	if (a<0) 
+	     a = 360 + a;
+		 
+	
+	if( (a > 0 && a < 45) ||(a < 360 && a > 315) ) 
+	plaer.vx = speed;
+	
+	if( (a > 135 && a < 225)  ) 
+	plaer.vx = -speed;
+	
+	if( (a > 45 && a < 135)  ) 
+	plaer.vy = -speed;
+	
+	if( (a > 225 && a < 315)  ) 
+	plaer.vy = speed + 0.6;
+	
+	if(getLong(clickXY,menyVector)<50) {
+	plaer.vy = 0;
+	plaer.vx= 0;
+	}
+	}
+  };
+
+
+
+  
+  var time =function (){
+ 
+       if(!startGame) 
+	     return;
+	   
+	   
+	   
+       clear();
+	   if(sensor){
+	   ctx.drawImage(imageStop,menyVector.x,menyVector.y,50,50);
+	   ctx.drawImage(imageRight,menyVector.x+100,menyVector.y,50,50);
+	   ctx.drawImage(imageLeft,menyVector.x-100,menyVector.y,50,50);
+	   ctx.drawImage(imageDown,menyVector.x,menyVector.y+100,50,50);
+	   ctx.drawImage(imageTop,menyVector.x,menyVector.y-100,50,50);
+	   }
+	   if(instructionTime>0 && !sensor){
+	     instructionTime--;
+         ctx.drawImage(imageInstruc,0,500,500,300);
+		 	 
+    	} 
+		
+	  //print("до следущего уровня: "+score+"/"+nextLevel+"      макс счет:"+ maxScore,0);
+	  print("МОЙ СЧЕТ : "+score,50);
+	  //print(maxScore,30);
+	
+	
+ if(getRandomArbitrary(0,150)>148-maxHard+19){//////////////////
+  
+    switch(  getRandomInt(1,Math.min(level,maxLevel))) {
+	case 1 :creatBlockageLevel1(getRandomArbitrary(-20,width+20) , getRandomArbitrary(plaer.center.x-1000,plaer.center.x-400)); break;
+	case 2 :creatBlockageLevel2(getRandomArbitrary(-20,width+20) , getRandomArbitrary(plaer.center.x-1000,plaer.center.x-400)); break;
+	case 3 :creatBlockageLevel3(getRandomArbitrary(-20,width+20) , getRandomArbitrary(plaer.center.x-1000,plaer.center.x-400)); break;
+	}
+     
+
+		
+	}	
+	 if(plaer.searchConflictPolygon(blockagePolygon)){
+	
+       blockagePolygon.splice(0,blockagePolygon.length-1 );
+	   $("#wrapperCanvas").hide();//document.write("выш рекорд");
+	    $("#meny").show();
+	
+		
+		//instructionTime =500;
+	   startGame=false;
+	   maxScore = Math.max(maxScore,score);
+	   	
+	   
+	  var ans = "<p>Мой cчет за игру : " + score +"</p><p>Мой максимальный счет : " + maxScore +"</p>";
+	  score = 0;
+	  
+	  $("#stat").html( ans);
+       newGame();
+	 }
+	
+	   
+	 plaer.newCord(); 
+	
+	 if(plaer.center.y < 10  ) {
+	   plaer.vy =0;
+	   plaer.center.y =10;
+	 }
+	 
+	 if(plaer.center.y > height   ) {
+	   plaer.vy =0;
+	   
+	   plaer.center.y = height ;
+	 }
+	 
+	  if( plaer.center.x < 0  ) {
+	   
+	   plaer.vx =0;
+	   plaer.center.x =0;
+	 }
+	 
+	 if( plaer.center.x > width - 10   ) {
+	   
+	  plaer.vx =0;
+	   plaer.center.x =width - 10 ;
+	 }
+	 
+	// plaer.newMove();
+     plaer.draw();
+	
+	  for( var i = 0; i < blockagePolygon.length ;++i) {
+	  
+	    if(blockagePolygon[i].movedBorder(height)){ 
+		  blockagePolygon.splice(i, 1);
+		  i--;
+		  score++;
+		  
+		  if(score==20){
+		  nextLevel =60;
+		  level=2;
+		  }
+	
+		if(score==60){
+		  nextLevel =100;
+		  level=3;
+		  }
+		if(score==100){
+		  nextLevel =200;
+		  level++;
+		  }
+		  
+		  continue;
+		}
+        blockagePolygon[i].newCordLevel(); 
+	    blockagePolygon[i].newCord(); 
+		
+		//  blockagePolygon[i].updatePlanetaryCord();
+		 // print( blockagePolygon[i].center.y,100);
+	   // blockagePolygon[i].center.y++; 
+        blockagePolygon[i].draw();
+	   
+	  }
+	ctx.drawImage(imagePause,450,0,50,50);
+	
+  }
+  
+document.onkeydown = function(e) {
+
+    console.log(e);
+	
+
+ 
+   switch(e.keyCode) {
+   
+    case 68 :  plaer.vx = speed;break;
+	case 39 :  plaer.vx = speed;break;
+	
+    case 65:   plaer.vx = -speed;break;
+	case 37:   plaer.vx = -speed;break;
+	
+	case 87: plaer.vy =-speed;break;
+	case 38: plaer.vy =-speed;break;
+	
+	case 83:  plaer.vy =speed+0.6;break;
+	case 40:  plaer.vy =speed+0.6;break;
+	
+	case 32:  plaer.vy =0;
+	plaer.vx =0;
+	;break;
+   }
+  }
+  setInterval(time,10);
+
+ var  sensor ;
+ var maxScore = 0;
+ var score = 0 ;
+ var startGame = false;
+ var plaer;
+ var level=3;
+ var nextLevel = 20;
+ var maxLevel=3;
+ var maxSpeedOption=0;
+ var maxSpeed=1;
+ var maxHard=19;
+ var instructionTime=500;
+ var loadImage=0;
+ var speed = 1.1 ;
+ var imageInstruc =new Image();
+ var imagePause =new Image();
+ 	var menyVector = new vector();  
+	menyVector.y =600;
+	menyVector.x =230;
+/*
+  image.onload = function (){
+  loadImage++;
+};
+
+ image2.onload = function (){
+  loadImage++;
+};*/
+ var imageTop =new Image();
+ var imageDown =new Image();
+ var imageRight =new Image();
+ var imageLeft =new Image();
+ var imageStop =new Image();
+ imageLeft.src="left.png";
+ imageRight.src="right.png";
+ imageTop.src="top.png";
+ imageDown.src="down.png";
+ imageStop.src="stop.png";
+imageInstruc.src="instruction.png";
+imagePause.src="pause2.png";
+
+if (device.mobile() || device.tablet())
+ sensor =true;
+ else
+ sensor =false;
+
+ var blockagePolygon = []; 
+ newGame();
+ /*
+ var x2 = width /2-100;
+ var y2 = height /2-100;
+
+    var creatPolyCord = [];
+  creatPolyCord[0]= new vector();
+  creatPolyCord[0].x = 0+x2;
+  creatPolyCord[0].y = 0+y2;
+  
+  creatPolyCord[1]= new vector();
+  creatPolyCord[1].x =100+x2;
+  creatPolyCord[1].y = 0+y2;
+  
+  creatPolyCord[2]= new vector();
+  creatPolyCord[2].x =100+x2;
+  creatPolyCord[2].y =10+y2;
+
+  creatPolyCord[3]= new vector();
+  creatPolyCord[3].x = 0+x2;
+  creatPolyCord[3].y = 10+y2;
+  
+
+  
+  
+   var id =  blockagePolygon.length;
+   
+   blockagePolygon[id]= new polygonBlockageLevel2(creatPolyCord ,50+x2,50+y2);
+   
+     //blockagePolygon[id].center2Id=3;
+	blockagePolygon[id].x = 50 + x2;
+	blockagePolygon[id].y = 5 + y2;
+	
+	
+	
+	
+	
+	
+	
+	
+   blockagePolygon[id].vy=0;
+  blockagePolygon[id].moveAngle= 1;
+  blockagePolygon[id].updatePlanetaryCord();
+    blockagePolygon[id].updatePlanetaryCord();*/
+	
+	
+	//creatBlockageLevel3( 400,400 );
+
+</script>
+
+
+</body>
+
+ 
+</html>
